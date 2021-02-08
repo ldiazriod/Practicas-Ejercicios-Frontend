@@ -1,0 +1,21 @@
+#customButton2 {
+    text-align: center;
+    outline: none;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #999;
+    margin: 10px;
+    width: 200px;
+    height: 30px;
+}
+
+#customButton2:hover {
+    background-color: violet;
+    box-shadow: 0 5px greenyellow;
+    cursor:grab;
+}
+
+#customButton2:active {
+    background-color: violet;
+    box-shadow: 0 5px greenyellow;
+}
