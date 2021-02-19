@@ -139,6 +139,12 @@ const initGame = () => {
                     allEnemies.splice(allEnemies.indexOf(elem), 1)
                 }
             })
+            allMeteores.forEach((elem) => {
+                const e = elem;
+                if(m.x <= e.x + e.w && m.x + m.w >= e.x && m.y >= e.y && m.y <= e.y + e.h){
+                    allMeteores.splice(allMeteores.indexOf(elem), 1)
+                }
+            })
         }
 
 
