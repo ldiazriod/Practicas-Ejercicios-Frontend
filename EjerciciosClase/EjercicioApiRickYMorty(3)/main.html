@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="./style.css">
+        <script>
+            var pageLink = "https://rickandmortyapi.com/api/character";
+            var counter = 1;
+            
+            const pageInit = () => {
+                fetch(pageLink)
+                .then(response => response.json())
+                .then(data => fillData(data));
+            }
+
+            const fillData = (data) => {
+                var html = "";
+                for(var i = 0; i < data.results.length; i++){
+                    html += "<div class ='singleCharacter'>"
+                        html += "<img class ='imageCharacter' src='"+ data.results[i].image +"' alt="+data.results[i].name+"/>"
+                        html += "<div>"
+                            html += "<strong>Name: </strong>"+ data.results[i].name +" <br>"
+                            html += "<strong>Status: </strong>"+ data.results[i].status +" <br>"
+                            html += "<strong>Species: </strong>"+ data.results[i].species +" <br>"
+                            html += "<strong>Gender: </strong>"+ data.results[i].gender +" <br>"
+                            html += "<strong>Origin: </strong>"+ data.results[i].origin.name +" <br>"
+                            html += "<strong>Location: </strong>"+ data.results[i].location.name +" <br>"
+                        html += "</div>"
+                    html += "</div>"
+                };
+                document.getElementById("characterDisplay").innerHTML = html;
+
+                html = "";
+                if(data.info.prev === null){
+                    document.getElementById("prev").innerHTML = "";
+                    document.getElementById("pageNum").innerHTML = counter;
+                    document.getElementById("next").innerHTML = "<a id=nextClick href="+ data.info.next +" title='Next Page' onclick='return prevNext(id)'><img class=nextPrevButton src='./flechaNext.png'></a>";
+                }else if(data.info.next === null){
+                    document.getElementById("prev").innerHTML = "<a id=prevClick href="+ data.info.prev +" title='Previous Page' onclick='return prevNext(id)'><img class=nextPrevButton src='./flechaPrev.png'></a>";
+                    document.getElementById("pageNum").innerHTML = counter;
+                    document.getElementById("next").innerHTML = "";
+                }else{
+                    document.getElementById("prev").innerHTML = "<a id=prevClick href="+ data.info.prev +" title='Next Page' onclick='return prevNext(id)'><img class=nextPrevButton src='./flechaPrev.png'></a>";;
+                    document.getElementById("pageNum").innerHTML = counter;
+                    document.getElementById("next").innerHTML = "<a id=nextClick href="+ data.info.next +" title='Previous Page' onclick='return prevNext(id)'><img class=nextPrevButton src='./flechaNext.png'></a>";
+                }
+            }
+            
+            const prevNext = (id) => {
+                pageLink = document.getElementById(id).href;
+                if(id === "nextClick"){
+                    counter++;
+                }else{
+                    counter--;
+                }
+                pageInit(pageLink);
+                return false;
+            }
+        </script>
+    </head>
+    <body onload="pageInit()">
+        <div id="mainScreen">
+            <div id="characterDisplay"></div>
+            <div id="nextPrevDisplay">
+                <div id="prev"></div>
+                <div id="pageNum"></div>
+                <div id="next"></div>
+            </div>
+        </div>
+    </body>
+</html>

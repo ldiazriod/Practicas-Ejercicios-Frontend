@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            const films = [
+                {
+                    name: "La Comunidad del Anillo",
+                    img: "https://...",
+                    director: "Peter Jackson",
+                    year: 2000
+                },
+                {
+                    name: "Las dos Torres",
+                    img: "https://...",
+                    director: "Peter Jackson",
+                    year: 2000
+                },
+                {
+                    name: "La Comunidad del Anillo",
+                    img: "https://...",
+                    director: "Peter Jackson",
+                    year: 2000
+                }
+            ]
+
+            const cargarListado = () =>{
+                let html = "";
+                films.forEach((elem) => {
+                    html += "<div class ='mini'>"
+                    html += `<img class ='thumbnail' src = ${elem.img} />`
+                    html += "<div class='title'>" + elem.name + "</div>"
+                    html += "</div>"
+                })
+                document.getElementById("listado").innerHTML = html;
+            }
+
+            const show = (elem) => {
+                document.getElementById("img-detail").src = elem.img
+            }
+        </script>
+    </head>
+    <body onload="cargarListado()">
+        <div id="detalle">
+            <img id="img-detail">
+            <div id=datos>
+                
+            </div>
+            <div id=listado></div>
+        </div>
+    </body>
+</html>

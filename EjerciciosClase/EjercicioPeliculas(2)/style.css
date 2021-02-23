@@ -1,0 +1,21 @@
+.thumbnail {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.mini {
+    width: 200px;
+    border: 1px solid black;
+    text-align: center;
+}
+
+#listado {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-top: 20px;
+    margin: 20px;
+}
