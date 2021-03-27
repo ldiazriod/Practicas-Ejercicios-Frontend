@@ -1,0 +1,9 @@
+.selector{
+    display: flex;
+    flex-direction: row;
+}
+
+.buttonSelector{
+    background-color: transparent;
+    font-size: 25px;
+}
