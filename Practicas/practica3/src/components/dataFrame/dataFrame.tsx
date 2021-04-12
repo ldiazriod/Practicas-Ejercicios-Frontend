@@ -41,12 +41,22 @@ interface IFilms{
     title: string;
 }
 
+interface IDataType{
+    count: number;
+    next: string;
+    previous: string;
+    results: [IPeople]
+}
+
+//Dibujar lo que quiero. Evitar bucles infitinos. 
+
 const DataFrame: FC<IDataFrameProps> = (props) =>{
     const [dataLink1, setDataLink1] = useState<AxiosResponse[]>([]);
-    const [toSearch, setToSearch] = useState<string>("")
+    const [toSearch, setToSearch] = useState<string>("");
     const [searchType, setSearchType] = useState<boolean>(false);
     const [searchType2, setSearchType2] = useState<boolean>(false);
-    
+    const [displayMode, setDisplayMode] = useState<number>(0);
+
     useEffect(() =>{
         setDataLink1([])
         setSearchType(false);
@@ -54,21 +64,70 @@ const DataFrame: FC<IDataFrameProps> = (props) =>{
             const response = await axios.get(myLink)
             const data: AxiosResponse = await response;
             if(data !== null){
-                setDataLink1((elem) => [...elem, data])
+                if(displayMode === 0){
+                    setDataLink1((elem) => [...elem, data]);
+                }else{
+                    let typeOfSort: number = 0;
+                    if(displayMode === 1){
+                        typeOfSort = 1;
+                    }else if(displayMode === 2){
+                        typeOfSort = -1;
+                    }else{
+                        console.log("Oh no...");
+                    }
+                    const sorted = data.data.results.sort((a: {[key: string]:string}, b: {[key:string]:string}) => {
+                        let aU: string = "";
+                        let bU: string = "";
+                        if(props.types === "people" || props.types === "planets"){
+                            aU = a.name.toLowerCase();
+                            bU = b.name.toLowerCase();
+                        }else if(props.types === "films"){
+                            aU = a.title.toLowerCase();
+                            bU = b.title.toLowerCase();
+                        }else{
+                            console.log("Oh no...")
+                        }
+                        if(aU < bU){
+                            return (typeOfSort - (typeOfSort * 2));
+                        }
+                        if(aU > bU){
+                            return typeOfSort;
+                        }
+                        return 0;
+                    })
+                    const aux: AxiosResponse = {
+                        config: data.config,
+                        data: {
+                            count: data.data.count,
+                            next: data.data.next,
+                            previous: data.data.previous,
+                            results: sorted
+                        },
+                        headers: data.headers,
+                        request: data.request,
+                        status: data.status,
+                        statusText: data.statusText
+                    }
+                    setDataLink1((elem) => [...elem, aux]);               
+                }
             }
             if(data.data.next !== null){
-                aux1(data.data.next)
+                aux1(data.data.next);
+            }else{
+                if(displayMode === 1){
+
+                }
             }
         }
         if(searchType2){
             const clearId = setTimeout(() => {              
                 aux1(props.links + `?search=${toSearch}`)
-            }, 1000)
-            return () => clearTimeout(clearId)
+            }, 1000);
+            return () => clearTimeout(clearId);
         }else{
-            aux1(props.links)
+            aux1(props.links);
         }
-    }, [props.links, toSearch])
+    }, [props.links, toSearch, displayMode]);
 
     const displayAll = () => {
         if(props.types === "people"){
@@ -152,14 +211,19 @@ const DataFrame: FC<IDataFrameProps> = (props) =>{
         }
     }
 
+    //console.log(dataLink1)
+
     return (
         <div className="dataFrame">
             <div className="searchMode">
+                <button onClick={(e) => setDisplayMode(0)}>Default</button>
+                <button onClick={(e) => setDisplayMode(1)}>A-Z</button>
+                <button onClick={(e) => setDisplayMode(2)}>Z-A</button>
                 <button onClick={(e) => [setSearchType(true), setSearchType2(false)]}> View All</button>
                 <input type="text" onChange={(e) => [waitOnChange(e), onChangeSetState(e)]}/>
             </div>
             {searchType && displayAll()}
-            {searchType2 && displayAll()} 
+            {searchType2 && displayAll()}
         </div>
     )
 }
