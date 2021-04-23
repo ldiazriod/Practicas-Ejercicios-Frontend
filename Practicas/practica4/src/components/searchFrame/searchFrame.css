@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500&display=swap');
+.cardsFrame{ /* All rows container */
+    display: flex;
+    flex-direction: column;
+}
+.rowsCardsFrame{ /* All rows of cards */
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+    justify-content: center;
+    height: 100%;
+    max-width: 100%;
+    width: auto;
+}
+
+.allRowData{
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    width: fit-content;
+    padding: 10px;
+    align-self: center;
+}
+
+.allComponents{
+    display: flex;
+    flex-direction:  column;
+    align-content: center;
+    width: 100%;
+    font-family: 'Cinzel', serif;
+}
+
+.allComponents button{
+    font-family: 'Cinzel', serif;
+}
+
+.allComponents button:hover{
+    background-color: turquoise;
+}
+
+.allComponents input{
+    font-family: 'Cinzel', serif;
+}
