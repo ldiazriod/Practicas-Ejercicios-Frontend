@@ -1,6 +1,9 @@
-import React, {FC} from "react";
+import React, {FC, useState} from "react";
 import {gql, useQuery} from "@apollo/client";
 import styled from "@emotion/styled";
+import {Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
+import ReturnCities from "../searchCity/searchCity"
+import "bootstrap/dist/css/bootstrap.min.css";
 
 interface IProps{
     searchElem: string,
@@ -29,6 +32,8 @@ interface ICountry{
 
 
 const ReturnCountries: FC<IProps> = (props) => {
+    const [dropDownDisplay, setDropDownDisplay] = useState<boolean>(false);
+    const [dropDownDisplay2, setDropDownDisplay2] = useState<boolean>(false);
     const COUNTRIES = gql`
     query MyQuery {
         countries(where: {name: {eq: "${props.searchElem}"}}) {
@@ -48,33 +53,47 @@ const ReturnCountries: FC<IProps> = (props) => {
             } 
         }
     }
-`
+    `
+    const changeDropDownState = () => {
+        setDropDownDisplay(!dropDownDisplay);
+    }
+
+    const changeDropDownState2 = () => {
+        setDropDownDisplay2(!dropDownDisplay2);
+    }
     const {data, loading, error} = useQuery<ICountries>(COUNTRIES)
     if(error){
         console.log(error)
     }
-    console.log(data)
+    if(loading){
+        return <div>Charging...</div>
+    }
     return(
         <CountryContainer>
             {data?.countries.map((elem) => {
-                return <Country>
-                    <div>{elem.name}</div>
-                    <div><strong>Population:</strong> {elem.population}</div>
-                    <ClickableCapital><strong>Capital:</strong> {elem.capital?.name}</ClickableCapital>
-                    <div><strong>Lenguajes:</strong> <br />{elem.languages.map((elem2) => {
-                        return <div>
-                            {elem2.name}
-                        </div>
-                        })}
-                    </div>
-                    <div><strong>Continent:</strong> {elem.continent.name}</div>
-                    <div><strong>Currencies:</strong> <br />{elem.currencies.map((elem3) => {
-                        return <div>
-                            {elem3.name}
-                        </div>
-                        })}
-                    </div>
-                </Country>
+                return <Dropdown isOpen={dropDownDisplay} toggle={changeDropDownState} direction="down">
+                <DropdownToggle>
+                    {elem.name}
+                </DropdownToggle>
+                <DropdownMenu>
+                    <DropdownItem><strong>Population:</strong> {elem.population}</DropdownItem>
+                    <Dropdown isOpen={dropDownDisplay2} toggle={changeDropDownState2} direction="left" >
+                        <DropdownToggle style={{backgroundColor: "transparent", color: "black", borderColor:"transparent"}}>
+                        <strong>Capital:</strong> {elem.capital?.name}
+                        </DropdownToggle>
+                        <DropdownMenu>
+                            <DropdownItem></DropdownItem>
+                        </DropdownMenu>
+                    </Dropdown>
+                    <DropdownItem><strong>Lenguajes: </strong> {elem.languages.map((elem2) => {
+                        return <DropdownItem>{elem2.name}</DropdownItem>
+                    })}</DropdownItem>
+                    <DropdownItem><strong>Continent:</strong> {elem.continent.name}</DropdownItem>
+                    <DropdownItem><strong>Currencies:</strong> <br /> {elem.currencies.map((elem3) => {
+                        return <DropdownItem>{elem3.name}</DropdownItem>
+                    })}</DropdownItem>
+                </DropdownMenu>
+            </Dropdown>
             })}
         </CountryContainer>
     )
@@ -82,18 +101,6 @@ const ReturnCountries: FC<IProps> = (props) => {
 
 export default ReturnCountries;
 
-const ClickableCapital = styled.div`
-    color: black; 
-    &:hover{
-        color: green
-    }
-`
-const Country = styled.div`
-    width: 300px;
-    border-radius: 5px;
-    background-color: rgba(128, 128, 128, 0.308);
-    color: black;
-`
 
 const CountryContainer = styled.div`
     display: flex;
