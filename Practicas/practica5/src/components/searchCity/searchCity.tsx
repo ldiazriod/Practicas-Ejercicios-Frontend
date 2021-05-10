@@ -7,6 +7,7 @@ import ReturnCountries from "../searchCountry/searchCountry"
 
 interface IProps {
     searchElem: string;
+    toDisplay : boolean;
 }
 
 interface ICities{
@@ -58,29 +59,45 @@ const ReturnCities: FC<IProps> = (props) => {
         console.log(error)
         return <div>There has been an error</div>
     }
-    return (
-        <CityContainer>
-            {data?.cities.map((elem) => {
-                return  <Dropdown isOpen={dropDownDisplay} toggle={changeDropDownState} direction="down">
-                <DropdownToggle>
-                    {elem.name}
-                </DropdownToggle>
-                <DropdownMenu>
-                    <DropdownItem><strong>Population:</strong> {elem.population}</DropdownItem>
-                    <Dropdown isOpen={dropDownDisplay2} toggle={changeDropDownState2} direction="left" >
-                        <DropdownToggle style={{backgroundColor: "transparent", color: "black", borderColor:"transparent"}}>
-                            <strong>Country: </strong> {elem.country.name}
-                        </DropdownToggle>
-                        <DropdownMenu>
-                            <DropdownItem><ReturnCountries searchElem={elem.country.name}/></DropdownItem>
-                        </DropdownMenu>
-                    </Dropdown>
-                    <DropdownItem><strong>Time zone:</strong> {elem.timeZone?.name}</DropdownItem>
-                </DropdownMenu>
-            </Dropdown>
-            })}
-        </CityContainer>
-    )
+
+    if(props.toDisplay){
+        return(
+            <div>
+                {data?.cities.map((elem) => {
+                    return <div>
+                        <div>{elem.name}</div>
+                        <div>{elem.population}</div>
+                        <div>{elem.country.name}</div>
+                        <div>{elem.timeZone.name}</div>
+                    </div>
+                })}
+            </div>
+        )
+    }else{
+        return (
+            <CityContainer>
+                {data?.cities.map((elem) => {
+                    return  <Dropdown isOpen={dropDownDisplay} toggle={changeDropDownState} direction="down">
+                    <DropdownToggle>
+                        {elem.name}
+                    </DropdownToggle>
+                    <DropdownMenu>
+                        <DropdownItem><strong>Population:</strong> {elem.population}</DropdownItem>
+                        <Dropdown isOpen={dropDownDisplay2} toggle={changeDropDownState2} direction="left" >
+                            <DropdownToggle style={{backgroundColor: "transparent", color: "black", borderColor:"transparent"}}>
+                                <strong>Country: </strong> {elem.country.name}
+                            </DropdownToggle>
+                            <DropdownMenu>
+                                <DropdownItem><ReturnCountries searchElem={elem.country.name} toDisplay={true}/></DropdownItem>
+                            </DropdownMenu>
+                        </Dropdown>
+                        <DropdownItem><strong>Time zone:</strong> {elem.timeZone?.name}</DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
+                })}
+            </CityContainer>
+        )
+    }
 }
 
 export default ReturnCities;

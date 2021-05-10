@@ -19,8 +19,8 @@ const SearchFrame: FC = () => {
         console.log(typeOfSearch)
         return(
             <div>
-                {!typeOfSearch && <ReturnCountries searchElem={searchValue}/>}
-                {typeOfSearch && <ReturnCities searchElem={searchValue}/>}
+                {!typeOfSearch && <ReturnCountries searchElem={searchValue} toDisplay={false}/>}
+                {typeOfSearch && <ReturnCities searchElem={searchValue} toDisplay={false}/>}
             </div>
         )
     }

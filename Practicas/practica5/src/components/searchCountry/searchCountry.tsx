@@ -7,6 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 interface IProps{
     searchElem: string,
+    toDisplay : boolean,
 }
 
 interface ICountries {
@@ -68,35 +69,63 @@ const ReturnCountries: FC<IProps> = (props) => {
     if(loading){
         return <div>Charging...</div>
     }
-    return(
-        <CountryContainer>
-            {data?.countries.map((elem) => {
-                return <Dropdown isOpen={dropDownDisplay} toggle={changeDropDownState} direction="down">
-                <DropdownToggle>
-                    {elem.name}
-                </DropdownToggle>
-                <DropdownMenu>
-                    <DropdownItem><strong>Population:</strong> {elem.population}</DropdownItem>
-                    <Dropdown isOpen={dropDownDisplay2} toggle={changeDropDownState2} direction="left" >
-                        <DropdownToggle style={{backgroundColor: "transparent", color: "black", borderColor:"transparent"}}>
-                        <strong>Capital:</strong> {elem.capital?.name}
-                        </DropdownToggle>
-                        <DropdownMenu>
-                            <DropdownItem></DropdownItem>
-                        </DropdownMenu>
-                    </Dropdown>
-                    <DropdownItem><strong>Lenguajes: </strong> {elem.languages.map((elem2) => {
-                        return <DropdownItem>{elem2.name}</DropdownItem>
-                    })}</DropdownItem>
-                    <DropdownItem><strong>Continent:</strong> {elem.continent.name}</DropdownItem>
-                    <DropdownItem><strong>Currencies:</strong> <br /> {elem.currencies.map((elem3) => {
-                        return <DropdownItem>{elem3.name}</DropdownItem>
-                    })}</DropdownItem>
-                </DropdownMenu>
-            </Dropdown>
-            })}
-        </CountryContainer>
-    )
+    if(props.toDisplay){
+        return(
+            <div>
+                {data?.countries.map((elem) => {
+                   return <div>
+                        <div>{elem.name}</div>
+                        <div>{elem.population}</div>
+                        <div>{elem.capital?.name}</div>
+                        <div>{elem.languages.map((elem2) => {
+                            return <div>
+                                {elem2.name}
+                            </div>
+                        })}
+                        </div>
+                        <div>{elem.currencies.map((elem3) => {
+                            return <div>
+                                {elem3.name}
+                            </div>
+                        })}</div>
+                        <div>
+                            {elem.continent.name}
+                        </div>
+                    </div>
+                })}
+            </div>
+        )
+    }else{
+        return(
+            <CountryContainer>
+                {data?.countries.map((elem) => {
+                    return <Dropdown isOpen={dropDownDisplay} toggle={changeDropDownState} direction="down">
+                    <DropdownToggle>
+                        {elem.name}
+                    </DropdownToggle>
+                    <DropdownMenu>
+                        <DropdownItem><strong>Population:</strong> {elem.population}</DropdownItem>
+                        <Dropdown isOpen={dropDownDisplay2} toggle={changeDropDownState2} direction="left" >
+                            <DropdownToggle style={{backgroundColor: "transparent", color: "black", borderColor:"transparent"}}>
+                            <strong>Capital:</strong> {elem.capital?.name}
+                            </DropdownToggle>
+                            <DropdownMenu>
+                                <DropdownItem>{<ReturnCities searchElem={elem.capital?.name} toDisplay={true}/>}</DropdownItem>
+                            </DropdownMenu>
+                        </Dropdown>
+                        <DropdownItem><strong>Lenguajes: </strong> {elem.languages.map((elem2) => {
+                            return <DropdownItem>{elem2.name}</DropdownItem>
+                        })}</DropdownItem>
+                        <DropdownItem><strong>Continent:</strong> {elem.continent.name}</DropdownItem>
+                        <DropdownItem><strong>Currencies:</strong> <br /> {elem.currencies.map((elem3) => {
+                            return <DropdownItem>{elem3.name}</DropdownItem>
+                        })}</DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
+                })}
+            </CountryContainer>
+        )
+    }
 }
 
 export default ReturnCountries;
