@@ -1,5 +1,6 @@
-import React, {FC, useState} from "react";
+import React, {FC, useState, useEffect} from "react";
 import {gql, useQuery} from "@apollo/client";
+import axios from "axios";
 import styled from "@emotion/styled";
 import {Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
 import ReturnCities from "../searchCity/searchCity"
@@ -32,10 +33,19 @@ interface ICountry{
     }>,
 }
 
+interface IWeather {
+    weather: Array<{
+        description: string
+    }>
+    main: {
+        temp: number
+    }
+}
 
 const ReturnCountries: FC<IProps> = (props) => {
     const [dropDownDisplay, setDropDownDisplay] = useState<boolean>(false);
     const [dropDownDisplay2, setDropDownDisplay2] = useState<boolean>(false);
+    const [weatherData, setWeatherData] = useState<IWeather|undefined>(undefined);
     const COUNTRIES = gql`
     query MyQuery {
         countries(where: {name: {eq: "${props.searchElem}"}}) {
@@ -57,6 +67,13 @@ const ReturnCountries: FC<IProps> = (props) => {
         }
     }
     `
+    useEffect(() => {
+        axios.get<IWeather>(`${process.env.REACT_APP_API2_URL}=${props.searchElem}&appid=${process.env.REACT_APP_API2_KEY}`)
+        .then((response) => {
+            setWeatherData(response.data);
+        })
+    }, [props.searchElem])
+
     const changeDropDownState = () => {
         setDropDownDisplay(!dropDownDisplay);
     }
@@ -75,10 +92,18 @@ const ReturnCountries: FC<IProps> = (props) => {
         return(
             <div>
                 {data?.countries.map((elem) => {
-                   return <div>
+                    return <div>
                         <div>{elem.name}</div>
                         <div><strong>Population: </strong>{elem.population}</div>
                         <div><strong>Capital: </strong>{elem.capital?.name}</div>
+                        <div><strong>Capital Weather: </strong> <br/>
+                            <strong>Temp: </strong>{weatherData && (weatherData?.main.temp - 273.15).toFixed()} °C<br/>
+                            <strong>Description: </strong> {weatherData && weatherData.weather.map((elem2) => {
+                                return <div>
+                                    {elem2.description}
+                                </div>
+                            })}
+                        </div>
                         <div><strong>Lenguages: </strong><br />{elem.languages.map((elem2) => {
                             return <div>
                                 {elem2.name}
@@ -110,6 +135,13 @@ const ReturnCountries: FC<IProps> = (props) => {
                             <DropdownToggle style={{backgroundColor: "transparent", color: "black", borderColor:"transparent"}}>
                             <strong>Capital:</strong> {elem.capital?.name}
                             </DropdownToggle>
+                            <DropdownItem><strong> Capital Weather: </strong> <br/>
+                                <strong>Temp: </strong>{weatherData && (weatherData?.main.temp - 273.15).toFixed()} °C<br/>
+                                <strong>Description: </strong> {weatherData && weatherData.weather.map((elem2) => {
+                                return <div>
+                                    {elem2.description}
+                                </div>
+                            })}</DropdownItem>
                             <DropdownMenu>
                                 <DropdownItem>{<ReturnCities searchElem={elem.capital?.name} toDisplay={true}/>}</DropdownItem>
                             </DropdownMenu>

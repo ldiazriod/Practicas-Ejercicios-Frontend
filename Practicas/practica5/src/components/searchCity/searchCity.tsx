@@ -1,5 +1,6 @@
 import React, { FC, useState } from "react";
 import { from, gql, useQuery } from "@apollo/client";
+import axios from "axios";
 import styled from "@emotion/styled";
 import {Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -19,6 +20,7 @@ interface ICity{
     population: number
     country: {
         name: string
+        alpha2Code: string
     }
     timeZone: {
         name: string
@@ -36,6 +38,7 @@ const ReturnCities: FC<IProps> = (props) => {
             population
             country {
                 name
+                alpha2Code
             }
             timeZone {
                 name
@@ -66,9 +69,10 @@ const ReturnCities: FC<IProps> = (props) => {
                 {data?.cities.map((elem) => {
                     return <div>
                         <div>{elem.name}</div>
-                        <div>{elem.population}</div>
-                        <div>{elem.country.name}</div>
-                        <div>{elem.timeZone.name}</div>
+                        <div><strong>Population: </strong>{elem.population}</div>
+                        <div><strong>Country: </strong>{elem.country.name}</div>
+                        <div><strong>TimeZone: </strong>{elem.timeZone.name}</div>
+                        <div><img src={`https://www.countryflags.io/${elem.country.alpha2Code}/shiny/64.png`}/></div>
                     </div>
                 })}
             </div>
@@ -92,6 +96,7 @@ const ReturnCities: FC<IProps> = (props) => {
                             </DropdownMenu>
                         </Dropdown>
                         <DropdownItem><strong>Time zone:</strong> {elem.timeZone?.name}</DropdownItem>
+                        <DropdownItem><img src={`https://www.countryflags.io/${elem.country.alpha2Code}/shiny/64.png`}/></DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
                 })}
