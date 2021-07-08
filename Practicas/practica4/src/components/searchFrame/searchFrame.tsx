@@ -52,8 +52,6 @@ const SearchFrame: FC = () => {
     const changeStateDropDown = () =>{
         setDropDownMode(!dropDownMode)
     }
-    
-    /* */
 
     return(
         <div className="allComponents">
