@@ -52,6 +52,8 @@ const SearchFrame: FC = () => {
     const changeStateDropDown = () =>{
         setDropDownMode(!dropDownMode)
     }
+    
+    /* */
 
     return(
         <div className="allComponents">
@@ -59,7 +61,7 @@ const SearchFrame: FC = () => {
                 <input type="text" value={auxSearchValue[0]} onChange={(e) => [setSearchValue(e.target.value), setAuxSearchValue([e.target.value, ""])]} placeholder="Search by title"/>
                 <input type="text" value={auxSearchValue[1]} onChange={(e) => [setSearchValue(e.target.value), setAuxSearchValue(["", e.target.value])]} placeholder="Search by author"/>
                 <button onClick = {(e) => [search(manageUrl()), setApiPage(1), setPage(0)]}>Buscar</button>
-                {searching && <div><ClipLoader color="#0000ff#" size="20"/></div>}
+                {searching && <div><ClipLoader color="#0000ff" size="20"/></div>}
             </div>
             
             <div>
@@ -85,7 +87,6 @@ const SearchFrame: FC = () => {
                         <DropdownToggle>
                             Ordenar por
                         </DropdownToggle>
-
                         <DropdownMenu>
                             <DropdownItem onClick={(e) => setDropDownType([true, false, false, false, false])}>Estándar</DropdownItem>
                             <DropdownItem onClick={(e) => setDropDownType([false, true, false, false, false])}>Alfabético ascendente</DropdownItem>
@@ -141,12 +142,9 @@ const SearchFrame: FC = () => {
                             return <BookFrame book={book} typeOfSearch={typeOfSearch}/>
                         })}
                 </div>
-            
         </div>
     )
 }
-
-
 
 export default SearchFrame;
 
