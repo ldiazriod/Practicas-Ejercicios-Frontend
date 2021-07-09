@@ -1,0 +1,47 @@
+.tableD {
+    border: 1px solid black;
+    background-color: white;
+    margin-left: 50px;
+    margin-top: 50px;
+}
+
+.trashButton {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.trashButton img {
+    height: 15px;
+    width: 15px;
+}
+
+.calendarImg {
+    height: 15px;
+    width: 15px;
+}
+
+.headersColor {
+    background-color: gray;
+    border: 6px solid gray
+}
+
+.headersColor th  {
+    color: white;
+    border: 6px solid gray;
+    background-color: gray;
+}
+
+.headersColor tr {
+    background-color: gray;
+    border: 1px solid gray
+}
+
+.inputRows {
+    background-color: transparent;
+    border-color: transparent;
+    font-size: 15px;
+}
+
+.bodycolor {
+    background-color: white;
+}
